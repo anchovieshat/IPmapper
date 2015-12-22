@@ -20,7 +20,7 @@ typedef struct Interval {
 typedef struct Node {
     Interval i;
     u32 max;
-    char owner[30];
+    const char *owner;
     struct Node *left;
     struct Node *right;
 } Node;
@@ -42,17 +42,17 @@ IP toIP(const u32 val) {
     return t_ip;
 }
 
-Node *newNode(Interval i, char owner[30]) {
+Node *newNode(Interval i, const char *owner) {
     Node *tmp = malloc(sizeof(Node));
     tmp->i = i;
     tmp->max = i.high;
-    strcpy(tmp->owner, owner);
+    tmp->owner = owner;
     tmp->left = NULL;
     tmp->right = NULL;
     return tmp;
 }
 
-Node *insert(Node *root, Interval i, char owner[30]) {
+Node *insert(Node *root, Interval i, const char *owner) {
     if (root == NULL)
         return newNode(i, owner);
 
@@ -82,6 +82,12 @@ int main() {
 
     printf("IP %d.%d.%d.%d: %d\n", t_ip.first, t_ip.second, t_ip.third, t_ip.fourth, toU32(t_ip));
     printf("%d: IP %d.%d.%d.%d\n", val, t_ip2.first, t_ip2.second, t_ip2.third, t_ip2.fourth);
+
+    Interval i;
+    i.high = 2130706433;
+    i.low = 2130706432;
+    char *owner = "Carp incorporated";
+    Node *tree = insert(NULL, i, owner);
 
     return 0;
 }
